@@ -20,3 +20,17 @@ jobs:
         run: flake8 app.py
       - name: Проверка линтером MyPy
         run: mypy app.py
+deploy:
+    name: Развертывание на сервере
+    runs-on: ubuntu-latest
+    steps:
+      - name: Подключение к серверу
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: student
+          key: ${{ secrets.SSH_KEY }}
+          passphrase: 123
+          script: |
+            whoami
+            hostname
