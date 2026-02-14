@@ -1,7 +1,9 @@
 import gradio as gr
 
+
 def greet(image):
     return "Hello, world!"
+
 
 demo = gr.Interface(
     fn=greet,
@@ -9,5 +11,6 @@ demo = gr.Interface(
     outputs=["text"],
     api_name="predict"
 )
+
 
 demo.launch()
