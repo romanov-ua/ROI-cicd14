@@ -18,6 +18,5 @@ jobs:
 
       - name: Проверка линтером Flake8
         run: flake8 app.py
-          
       - name: Проверка линтером MyPy
         run: mypy app.py
