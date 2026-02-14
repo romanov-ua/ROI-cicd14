@@ -1,0 +1,23 @@
+name: Рабочий процесс
+on: [push]
+jobs:
+  testing:
+    name: Тестирование
+    runs-on: ubuntu-latest
+    steps:
+      - name: Клонирование репозитория
+        uses: actions/checkout@v6
+
+      - name: Настройка Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.14'
+
+      - name: Установка пакетов
+        run: pip install -r requirements.txt
+
+      - name: Проверка линтером Flake8
+        run: flake8 app.py
+          
+      - name: Проверка линтером MyPy
+        run: mypy app.py
