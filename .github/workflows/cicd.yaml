@@ -20,6 +20,39 @@ jobs:
         run: flake8 app.py
       - name: Проверка линтером MyPy
         run: mypy app.py
+
+  building:
+      name: Сборка образа для docker
+      runs-on: ubuntu-latest
+      permissions: 
+        contents: read
+        packages: write
+      needs: testing
+      steps:
+        - name: Клонирование репо
+          uses: actions/checkout@v6
+
+        - name: Вход в Github Container Registry
+          uses: docker/login-action@v3
+          with:
+            registry: ghcr.io
+            username: ${{ github.actor }}
+            password: ${{ secrets.GITHUB_TOKEN }}
+
+            
+        - name: Получаем имя репозитория
+          uses: docker/metadata-action@v5
+          id: meta
+          with:
+            images: ghcr.io/${{ github.repository }}
+          
+        - name: Сборка и публикация образа контейнера
+          uses: docker/build-push-action@v6
+          with:
+            context: .
+            push: true
+            tags: ${{ steps.meta.outputs.tags }}
+            labels: ${{ steps.meta.outputs.labels }} 
   deploy:
       name: Развертывание на сервере
       runs-on: ubuntu-latest
@@ -32,5 +65,7 @@ jobs:
             key: ${{ secrets.SSH_KEY }}
             passphrase: 123
             script: |
-              whoami
-              hostname
+              cd /home/student/leveryev
+              docker compose down
+              docker compose pull
+              docker compose up --detach
