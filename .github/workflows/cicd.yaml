@@ -65,7 +65,7 @@ jobs:
             key: ${{ secrets.SSH_KEY }}
             passphrase: 123
             script: |
-              cd /home/student/leveryev
+              cd /home/student/romanov
               docker compose down
               docker compose pull
               docker compose up --detach
